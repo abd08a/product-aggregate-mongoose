@@ -1,0 +1,68 @@
+h2 {
+  margin: auto;
+  text-align: center;
+}
+
+/* Basic Form Styling */
+form {
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #6ed42a52;
+  max-width: 500px; /* Optional: set max-width to prevent form from becoming too wide */
+  display: flex; /* Use flexbox */
+  flex-direction: column; /* Arrange items vertically */
+  /* align-items: center; Center items horizontally */
+}
+
+/* Form Input Fields */
+input[type="text"],
+input[type="number"],
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 1px 0;
+  border: 2px solid #0b8616;
+  border-radius: 3px;
+  box-sizing: border-box;
+  background-color: #e9dc2249;
+}
+input[type="number"] {
+  width: 20%;
+}
+
+/* Submit Button */
+button[type="submit"] {
+  background-color: #4caf50;
+  color: rgba(255, 175, 3, 0.836);
+  text-shadow: 2px 0px 1px #273d25;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  width: 80%;
+  margin: auto;
+}
+
+button[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+/* Error Message */
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+/* Label Styling */
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: -14px;
+  width: 100px; /* Adjust according to your design */
+  display: inline-block;
+}
