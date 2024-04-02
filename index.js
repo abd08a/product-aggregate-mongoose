@@ -4,6 +4,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import taskRouter from "./src/routes/product.js";
+import cartRouter from "./src/routes/cart.js";
 import "dotenv/config";
 
 const app = express();
@@ -20,6 +21,7 @@ mongoose
   });
 
 app.use(taskRouter);
+app.use(cartRouter);
 
 app.use((req, res) => {
   return res.status(404).json({ status: "Endpoint does not exist" });

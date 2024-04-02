@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 
-const cartGroupSchema = mongoose.Schema({
+const cartSchema = mongoose.Schema({
   date: { type: String, required: true },
   userEmail: { type: String, required: true, min: 3 },
-  userCartProducts_ids: { type: Array },
+  userCartProducts: { type: Array },
 });
 
-export default mongoose.model("CartGroup", cartGroupSchema);
+export default mongoose.model("Cart", cartSchema);
