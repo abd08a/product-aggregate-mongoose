@@ -5,7 +5,7 @@ const ADD_CART = async (req, res) => {
     const cart = new CartModel({
       date: req.body.date,
       userEmail: req.body.userEmail,
-      userCartProducts: req.body.userCartProducts,
+      userCartProducts: [],
     });
 
     const response = await cart.save();
@@ -21,7 +21,17 @@ const ADD_CART = async (req, res) => {
 
 const GET_CART_BY_ID = async (req, res) => {
   try {
-    const cart = await CartModel.findById(req.params.id);
+    const cart = await CartModel.aggregate([
+      {
+        $lookup: {
+          from: "products",
+          localField: "userCartProducts",
+          foreignField: "id",
+          as: "cartProducts",
+        },
+      },
+    ]).exec();
+
     return res.status(200).json({ cart: cart });
   } catch (err) {
     console.log("HANDLED ERROR", err);
@@ -29,4 +39,15 @@ const GET_CART_BY_ID = async (req, res) => {
   }
 };
 
-export { ADD_CART, GET_CART_BY_ID };
+const GET_ALL_PRODUCTS_IN_CART = async (req, res) => {
+  try {
+    const productsInCart = await CartModel.find();
+
+    return res.json({ resultProductsInCart: productsInCart });
+  } catch (err) {
+    console.log("HANDLED ERROR", err);
+    return res.status(500).json({ message: "error happened" });
+  }
+};
+
+export { ADD_CART, GET_CART_BY_ID, GET_ALL_PRODUCTS_IN_CART };

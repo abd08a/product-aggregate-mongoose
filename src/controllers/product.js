@@ -1,15 +1,20 @@
+import { v4 as uuidv4 } from "uuid";
 import ProductModel from "../models/product.js";
-
-let products = [];
+import CartModel from "../models/cart.js";
 
 const CREATE_PRODUCT = async (req, res) => {
   try {
     const product = new ProductModel({
+      id: uuidv4(),
       title: req.body.title,
       description: req.body.description,
     });
 
     const response = await product.save();
+
+    // await CartModel.findByIdAndUpdate(req.params.cartId, {
+    //   $push: { userCartProducts: product.id },
+    // });
 
     return res
       .status(201)
@@ -17,6 +22,61 @@ const CREATE_PRODUCT = async (req, res) => {
   } catch (err) {
     console.log("HANDLED ERROR", err);
     return res.status(500).json({ message: "error happened" });
+  }
+};
+
+const CREATE_PRODUCT_AND_ADD_TO_CART = async (req, res) => {
+  try {
+    const product = new ProductModel({
+      id: uuidv4(),
+      title: req.body.title,
+      description: req.body.description,
+    });
+
+    const response = await product.save();
+
+    await CartModel.findByIdAndUpdate(req.params.cartId, {
+      $push: { userCartProducts: product.id },
+    });
+
+    return res
+      .status(201)
+      .json({
+        status: "Product was created and added to specific cart",
+        response: response,
+      });
+  } catch (err) {
+    console.log("HANDLED ERROR", err);
+    return res.status(500).json({ message: "error happened" });
+  }
+};
+
+const ADD_PRODUCT_TO_CART = async (req, res) => {
+  try {
+    const cartId = req.params.cartId;
+    const productId = req.params.productId;
+
+    // Check if the cart exists
+    const cart = await CartModel.findById(cartId);
+    if (!cart) {
+      return res.status(404).json({ message: "Cart not found" });
+    }
+
+    // Check if the product exists
+    const product = await ProductModel.findById(productId);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    // Add productId to the specified cart
+    await CartModel.findByIdAndUpdate(cartId, {
+      $push: { userCartProducts: productId },
+    });
+
+    return res.status(201).json({ status: "Product was added to cart" });
+  } catch (err) {
+    console.log("HANDLED ERROR", err);
+    return res.status(500).json({ message: "Cart or product id is wrong" });
   }
 };
 
@@ -110,6 +170,8 @@ const DELETE_PRODUCT_BY_ID = async (req, res) => {
 
 export {
   CREATE_PRODUCT,
+  CREATE_PRODUCT_AND_ADD_TO_CART,
+  ADD_PRODUCT_TO_CART,
   GET_ALL_PRODUCTS,
   GET_PAGINATED_PRODUCTS,
   DELETE_ALL_PRODUCTS,
