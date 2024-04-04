@@ -1,17 +1,4 @@
-// Fetch data from the backend and render it on the page
-async function fetchProducts() {
-  try {
-    const response = await fetch("http://localhost:3001/products");
-    const data = await response.json();
-    console.log(data); // Log the data received from the server
-    renderProducts(data.resultProducts);
-  } catch (error) {
-    console.error("Error fetching products:", error);
-  }
-}
-
-// Render products on the page
-function renderProducts(products) {
+function renderProductsAsCards(products) {
   const productListDiv = document.getElementById("productList");
   productListDiv.innerHTML = ""; // Clear previous content
 
@@ -20,17 +7,33 @@ function renderProducts(products) {
     productCardDiv.classList.add("product-card");
 
     const titleHeading = document.createElement("h3");
-    titleHeading.textContent = product.title || "No Title"; // Display 'No Title' if title is missing
+    titleHeading.textContent = product.title;
 
     const descriptionPara = document.createElement("p");
-    descriptionPara.textContent = product.description || "No Description"; // Display 'No Description' if description is missing
+    descriptionPara.textContent = product.description;
+
+    const addToCartButton = document.createElement("button");
+    addToCartButton.textContent = "Add to Cart";
+    addToCartButton.addEventListener("click", () => {
+      // Add logic to add product to cart here
+    });
 
     productCardDiv.appendChild(titleHeading);
     productCardDiv.appendChild(descriptionPara);
+    productCardDiv.appendChild(addToCartButton);
 
     productListDiv.appendChild(productCardDiv);
   });
 }
 
-// Fetch and render products when the page loads
-document.addEventListener("DOMContentLoaded", fetchProducts);
+document.addEventListener("DOMContentLoaded", function () {
+  fetch("http://localhost:3001/products")
+    .then((response) => response.json())
+    .then((data) => renderProductsAsCards(data.resultProducts))
+    .catch((error) => console.error("Error fetching products:", error));
+
+  const viewCartButton = document.getElementById("viewCartButton");
+  viewCartButton.addEventListener("click", () => {
+    // Add logic to handle view cart button click here
+  });
+});
