@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import CartModel from "../models/cart.js";
 
 const ADD_CART = async (req, res) => {
@@ -30,6 +31,7 @@ const GET_CART_BY_ID = async (req, res) => {
           as: "cartProducts",
         },
       },
+      { $match: { _id: new mongoose.Types.ObjectId(req.params.id) } },
     ]).exec();
 
     return res.status(200).json({ cart: cart });
@@ -41,7 +43,16 @@ const GET_CART_BY_ID = async (req, res) => {
 
 const GET_ALL_PRODUCTS_IN_CART = async (req, res) => {
   try {
-    const productsInCart = await CartModel.find();
+    const productsInCart = await CartModel.aggregate([
+      {
+        $lookup: {
+          from: "products",
+          localField: "userCartProducts",
+          foreignField: "id",
+          as: "cartProducts",
+        },
+      },
+    ]).exec();
 
     return res.json({ resultProductsInCart: productsInCart });
   } catch (err) {

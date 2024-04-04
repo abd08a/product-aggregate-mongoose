@@ -1,0 +1,17 @@
+.product-card {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
+}
+
+.product-card h3 {
+  font-size: 1.2em;
+  margin-bottom: 5px;
+}
+
+.product-card p {
+  font-size: 1em;
+  color: #666;
+}

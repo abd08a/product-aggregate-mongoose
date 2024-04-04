@@ -6,12 +6,12 @@ document
     // Gather form data
     const formData = {
       title: document.getElementById("title").value,
-      id: document.getElementById("id").value,
+      // id: document.getElementById("id").value,
       description: document.getElementById("description").value,
     };
 
     // Send POST request to server
-    fetch("http://localhost:3000/createProduct", {
+    fetch("http://localhost:3001/products", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
