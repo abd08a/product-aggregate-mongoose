@@ -1,6 +1,7 @@
 h2 {
   margin: auto;
   text-align: center;
+  color: #007bff; /* Blue color */
 }
 
 /* Basic Form Styling */
@@ -9,7 +10,7 @@ form {
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  background-color: #6ed42a52;
+  background-color: #f9f9f9; /* Light grey background */
   max-width: 500px; /* Optional: set max-width to prevent form from becoming too wide */
   display: flex; /* Use flexbox */
   flex-direction: column; /* Arrange items vertically */
@@ -23,10 +24,10 @@ textarea {
   width: 100%;
   padding: 10px;
   margin: 1px 0;
-  border: 2px solid #0b8616;
+  border: 2px solid #007bff; /* Blue border */
   border-radius: 3px;
   box-sizing: border-box;
-  background-color: #e9dc2249;
+  background-color: #f0f0f0; /* Light grey background */
 }
 input[type="number"] {
   width: 20%;
@@ -34,9 +35,9 @@ input[type="number"] {
 
 /* Submit Button */
 button[type="submit"] {
-  background-color: #4caf50;
-  color: rgba(255, 175, 3, 0.836);
-  text-shadow: 2px 0px 1px #273d25;
+  background-color: #007bff; /* Blue color */
+  color: #fff; /* White color */
+  text-shadow: 2px 0px 1px rgba(0, 0, 0, 0.2); /* Shadow effect */
   font-size: 20px;
   font-weight: bold;
   padding: 10px 20px;
@@ -48,7 +49,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-  background-color: #45a049;
+  background-color: #0056b3; /* Darker blue color on hover */
 }
 
 /* Error Message */

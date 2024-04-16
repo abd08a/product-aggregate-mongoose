@@ -4,10 +4,10 @@ import CartModel from "../models/cart.js";
 
 const CREATE_PRODUCT = async (req, res) => {
   try {
+    console.log(req.body);
     const product = new ProductModel({
       id: uuidv4(),
-      title: req.body.title,
-      description: req.body.description,
+      ...req.body,
     });
 
     const response = await product.save();
@@ -39,12 +39,10 @@ const CREATE_PRODUCT_AND_ADD_TO_CART = async (req, res) => {
       $push: { userCartProducts: product.id },
     });
 
-    return res
-      .status(201)
-      .json({
-        status: "Product was created and added to specific cart",
-        response: response,
-      });
+    return res.status(201).json({
+      status: "Product was created and added to specific cart",
+      response: response,
+    });
   } catch (err) {
     console.log("HANDLED ERROR", err);
     return res.status(500).json({ message: "error happened" });
@@ -63,14 +61,18 @@ const ADD_PRODUCT_TO_CART = async (req, res) => {
     }
 
     // Check if the product exists
-    const product = await ProductModel.findById(productId);
+    const product = await ProductModel.findOne({ id: productId });
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
 
+    // Convert productId to string
+    const stringProductId =
+      typeof productId === "object" ? productId.id : productId;
+
     // Add productId to the specified cart
     await CartModel.findByIdAndUpdate(cartId, {
-      $push: { userCartProducts: productId },
+      $push: { userCartProducts: stringProductId },
     });
 
     return res.status(201).json({ status: "Product was added to cart" });
@@ -82,7 +84,7 @@ const ADD_PRODUCT_TO_CART = async (req, res) => {
 
 const GET_ALL_PRODUCTS = async (req, res) => {
   try {
-    const products = await ProductModel.find();
+    const products = await ProductModel.find({ userId: req.body.userId });
 
     return res.json({ resultProducts: products });
   } catch (err) {
@@ -116,7 +118,7 @@ const DELETE_ALL_PRODUCTS = (req, res) => {
 
 const GET_PRODUCT_BY_ID = async (req, res) => {
   try {
-    const product = await ProductModel.findById(req.params.id);
+    const product = await ProductModel.findOne({ id: req.params.id });
     return res.status(200).json({ product: product });
   } catch (err) {
     console.log("HANDLED ERROR", err);
@@ -127,7 +129,7 @@ const GET_PRODUCT_BY_ID = async (req, res) => {
 const UPDATE_PRODUCT_BY_ID = async (req, res) => {
   try {
     const product = await ProductModel.updateOne(
-      { _id: req.params.id },
+      { id: req.params.id },
       { ...req.body }
     );
 
@@ -138,29 +140,9 @@ const UPDATE_PRODUCT_BY_ID = async (req, res) => {
   }
 };
 
-// const UPDATE_PRODUCT_BY_ID = (req, res) => {
-//   const isProductExists = products.some(
-//     (product) => product.id === req.params.id
-//   );
-
-//   if (!isProductExists) {
-//     return res
-//       .status(404)
-//       .json({ message: `Product with id ${req.params.id} was not found` });
-//   }
-
-//   const index = products.findIndex((product) => {
-//     return product.id === req.params.id;
-//   });
-
-//   products[index].description = req.body.description;
-//   products[index].title = req.body.title;
-//   return res.json({ updatedProduct: products[index] });
-// };
-
 const DELETE_PRODUCT_BY_ID = async (req, res) => {
   try {
-    const product = await ProductModel.findByIdAndDelete(req.params.id);
+    const product = await ProductModel.findOneAndDelete({ id: req.params.id });
     return res.status(200).json({ message: "deleted", product: product });
   } catch (err) {
     console.log("HANDLED ERROR", err);

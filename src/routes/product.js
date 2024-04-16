@@ -10,16 +10,25 @@ import {
   DELETE_PRODUCT_BY_ID,
   UPDATE_PRODUCT_BY_ID,
 } from "../controllers/product.js";
+import auth from "../middlewares/auth.js";
+import validation from "../middlewares/validation.js";
+import taskValidationSchema from "../validationSchemas/product.js";
+
 const router = express.Router();
 
-router.post("/products", CREATE_PRODUCT);
-router.post("/products/:cartId", CREATE_PRODUCT_AND_ADD_TO_CART); //create product and add simultaneously to the specific cart
-router.post("/addProductToCart/:cartId/:productId", ADD_PRODUCT_TO_CART); // reikia kelti ne uuid sugeneruota id, o mongoose objektinio tipo id
-router.get("/products", GET_ALL_PRODUCTS);
-router.get("/paginated-products", GET_PAGINATED_PRODUCTS);
-router.delete("/products", DELETE_ALL_PRODUCTS);
-router.get("/products/:id", GET_PRODUCT_BY_ID);
-router.put("/products/:id", UPDATE_PRODUCT_BY_ID);
-router.delete("/products/:id", DELETE_PRODUCT_BY_ID);
+router.post(
+  "/products",
+  validation(taskValidationSchema),
+  auth,
+  CREATE_PRODUCT
+);
+router.post("/products/:cartId", auth, CREATE_PRODUCT_AND_ADD_TO_CART); //create product and add simultaneously to the specific cart
+router.post("/addProductToCart/:cartId/:productId", auth, ADD_PRODUCT_TO_CART); // reikia kelti ne uuid sugeneruota id, o mongoose objektinio tipo id
+router.get("/products", auth, GET_ALL_PRODUCTS);
+router.get("/paginated-products", auth, GET_PAGINATED_PRODUCTS);
+router.delete("/products", auth, DELETE_ALL_PRODUCTS);
+router.get("/products/:id", auth, GET_PRODUCT_BY_ID);
+router.put("/products/:id", auth, UPDATE_PRODUCT_BY_ID);
+router.delete("/products/:id", auth, DELETE_PRODUCT_BY_ID);
 
 export default router;

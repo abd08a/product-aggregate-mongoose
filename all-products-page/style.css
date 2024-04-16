@@ -1,9 +1,11 @@
 .product-card {
+  display: block;
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 10px;
   margin-bottom: 10px;
   background-color: #f9f9f9;
+  text-decoration: none;
 }
 
 .product-card h3 {
@@ -29,4 +31,24 @@
 
 .view-cart:hover {
   background-color: #0056b3;
+}
+
+.create-product {
+  position: relative;
+  top: 0px;
+  left: 200px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.create-product:hover {
+  background-color: #0056b3;
+}
+
+.heading-and-button {
+  display: flex;
+  align-items: center; /* Vertically center the items */
 }
